@@ -87,12 +87,11 @@ export default function HomeScreen({ navigation, menuItems }: Props) {
             
             <View style={styles.menuDivider} />
             
-            <TouchableOpacity
+           <TouchableOpacity
               style={styles.menuOption}
               onPress={() => {
                 setMenuVisible(false);
-                // navigation.navigate('FilterRecipes'); // we'll add this later
-                alert('Filter feature coming soon!');
+                navigation.navigate('FilterRecipes');
               }}
             >
               <Text style={styles.menuOptionText}>🔍 Filter Recipes</Text>

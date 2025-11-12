@@ -13,7 +13,7 @@ export interface MenuItem {
 // this type defines the navigation structure and the parameters each screen expects
 export type RootStackParamList = {
   Home: undefined;                    // Home screen does not expect any parameters
-  AddRecipe: undefined;               // AddRecipe screen does not expect any parameters
-  ManageMenu: undefined;               // ManageMenu screen does not expect any parameters               
+  ManageMenu: undefined;              // ManageMenu screen does not expect any parameters
+  FilterRecipes: undefined;           // FilterRecipes screen does not expect any parameters
   RecipeDetail: { recipe: MenuItem }; // RecipeDetail screen expects a 'recipe' parameter of type MenuItem
 };

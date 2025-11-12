@@ -4,9 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList, MenuItem } from '../types';
 
 import HomeScreen from '../screens/HomeScreen';
-import AddRecipeScreen from '../screens/AddRecipeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
-import ManageMenuScreen from '../screens/ManageMenuScreen'; // ADD THIS IMPORT
+import ManageMenuScreen from '../screens/ManageMenuScreen';
+import FilterScreen from '../screens/FilterScreen'; // ADD THIS IMPORT
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -70,13 +70,12 @@ export default function AppNavigation() {
           )}
         </Stack.Screen>
 
-        {/* AddRecipeScreen displays a form for adding new recipes (can remove this later if not needed) */}
-        <Stack.Screen name="AddRecipe">
+        {/* FilterScreen for filtering recipes by course */}
+        <Stack.Screen name="FilterRecipes">
           {(props) => (
-            <AddRecipeScreen
+            <FilterScreen
               {...props}
               menuItems={menuItems}
-              setMenuItems={setMenuItems}
             />
           )}
         </Stack.Screen>
