@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, ScrollView, TouchableOpacity, StyleSheet, StatusBar} from 'react-native';
+import React, { useState } from 'react';
+import {View, Text, ScrollView, TouchableOpacity, StyleSheet, StatusBar, Modal} from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList, MenuItem } from '../types';
 
@@ -14,31 +14,35 @@ interface Props {
 
 // main HomeScreen component that displays the menu/recipe list
 export default function HomeScreen({ navigation, menuItems }: Props) {
+  // state to control hamburger menu visibility
+  const [menuVisible, setMenuVisible] = useState(false);
+
   // function to calculate average price for each course type
-    const calculateAverages = () => {
-      const starters = menuItems.filter(item => item.course === 'Starter');
-      const mains = menuItems.filter(item => item.course === 'Main');
-      const desserts = menuItems.filter(item => item.course === 'Dessert');
+  const calculateAverages = () => {
+    const starters = menuItems.filter(item => item.course === 'Starter');
+    const mains = menuItems.filter(item => item.course === 'Main');
+    const desserts = menuItems.filter(item => item.course === 'Dessert');
 
-      // helper function to calculate average for a specific course
-      const getAverage = (items: MenuItem[]) => {
-        if (items.length === 0) return 0;
-        const total = items.reduce((sum, item) => sum + parseFloat(item.price), 0);
-        return total / items.length;
-      };
-
-      return {
-        starter: getAverage(starters),
-        main: getAverage(mains),
-        dessert: getAverage(desserts),
-        overall: menuItems.length > 0 
-          ? menuItems.reduce((sum, item) => sum + parseFloat(item.price), 0) / menuItems.length 
-          : 0,
-      };
+    // helper function to calculate average for a specific course
+    const getAverage = (items: MenuItem[]) => {
+      if (items.length === 0) return 0;
+      const total = items.reduce((sum, item) => sum + parseFloat(item.price), 0);
+      return total / items.length;
     };
 
-    // call the function to get the averages
-    const averages = calculateAverages();
+    return {
+      starter: getAverage(starters),
+      main: getAverage(mains),
+      dessert: getAverage(desserts),
+      overall: menuItems.length > 0 
+        ? menuItems.reduce((sum, item) => sum + parseFloat(item.price), 0) / menuItems.length 
+        : 0,
+    };
+  };
+
+  // call the function to get the averages
+  const averages = calculateAverages();
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#B8E6E6" />
@@ -48,7 +52,65 @@ export default function HomeScreen({ navigation, menuItems }: Props) {
         <Text style={styles.title}>CheffTingz</Text>
         <Text style={styles.subtitle}>My Menu </Text>
         <Text style={styles.count}>Total: {menuItems.length} recipes</Text>
-        {/* average price section */}
+        
+        {/* hamburger menu button */}
+        <TouchableOpacity
+          style={styles.hamburgerButton}
+          onPress={() => setMenuVisible(true)}
+        >
+          <Text style={styles.hamburgerIcon}>☰</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* hamburger menu modal */}
+      <Modal
+        visible={menuVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setMenuVisible(false)}
+        >
+          <View style={styles.menuDropdown}>
+            <TouchableOpacity
+              style={styles.menuOption}
+              onPress={() => {
+                setMenuVisible(false);
+                navigation.navigate('ManageMenu');
+              }}
+            >
+              <Text style={styles.menuOptionText}>📝 Manage Menu</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.menuDivider} />
+            
+            <TouchableOpacity
+              style={styles.menuOption}
+              onPress={() => {
+                setMenuVisible(false);
+                // navigation.navigate('FilterRecipes'); // we'll add this later
+                alert('Filter feature coming soon!');
+              }}
+            >
+              <Text style={styles.menuOptionText}>🔍 Filter Recipes</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.menuDivider} />
+            
+            <TouchableOpacity
+              style={styles.menuOption}
+              onPress={() => setMenuVisible(false)}
+            >
+              <Text style={[styles.menuOptionText, styles.cancelText]}>✕ Close</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* average price section */}
       <View style={styles.averageContainer}>
         <Text style={styles.averageTitle}>Average Prices</Text>
         <View style={styles.averageGrid}>
@@ -70,14 +132,13 @@ export default function HomeScreen({ navigation, menuItems }: Props) {
           <Text style={styles.overallValue}>R{averages.overall.toFixed(2)}</Text>
         </View>
       </View>
-      </View>
 
       {/*scrollable recipe list */}
       <ScrollView style={styles.recipeList} contentContainerStyle={styles.scrollContent}>
         {menuItems.length === 0 ? (
           <View style={styles.emptyContainer}>
-            {/* <Text style={styles.emptyText}>No recipes yet</Text>
-            <Text style={styles.emptySubtext}>Tap "Add Recipe" to get started!</Text>  feedback if there are no recipes (not needed for now) */}
+            <Text style={styles.emptyText}>No recipes yet</Text>
+            <Text style={styles.emptySubtext}>Add some recipes to get started!</Text>
           </View>
         ) : (
           menuItems.map((item) => (
@@ -107,16 +168,6 @@ export default function HomeScreen({ navigation, menuItems }: Props) {
           ))
         )}
       </ScrollView>
-
-      {/* add recipe button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('AddRecipe')}
-        >
-          <Text style={styles.addButtonText}>+ Add Recipe</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
@@ -199,7 +250,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 15,
   },
-
   // course badge colors
   starterBadge: {
     backgroundColor: '#4bbe94ff',
@@ -210,7 +260,6 @@ const styles = StyleSheet.create({
   dessertBadge: {
     backgroundColor: '#A8E6CF',
   },
-
   courseText: {
     fontSize: 12,
     fontWeight: '600',
@@ -227,83 +276,108 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  buttonContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingBottom: 30,
-  },
-  addButton: {
-    backgroundColor: '#6BC5C5',
-    paddingVertical: 16,
-    borderRadius: 30,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  addButtonText: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
   averageContainer: {
     backgroundColor: '#D4F1F1',
-    marginTop: 15,
-    marginHorizontal: -10,
-    marginLeft: -20,
-    marginRight: -20,
-    paddingHorizontal: 73,
+    marginHorizontal: 20,
+    marginBottom: 20,
     borderRadius: 15,
     padding: 18,
     borderWidth: 1,
     borderColor: '#94D4D4',
   },
-averageTitle: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#000',
-  marginBottom: 12,
-  textAlign: 'center',
-},
-averageGrid: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginBottom: 15,
-  paddingHorizontal: -10
-},
-averageItem: {
-  flex: 1,
-  alignItems: 'center',
-},
-averageLabel: {
-  fontSize: 12,
-  color: '#666',
-  marginBottom: 4,
-  fontWeight: '600',
-},
-averageValue: {
-  fontSize: 13,
-  fontWeight: 'bold',
-  color: '#000',
-},
-overallAverage: {
-  backgroundColor: '#6BC5C5',
-  borderRadius: 10,
-  padding: 12,
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-},
-overallLabel: {
-  fontSize: 14,
-  fontWeight: '600',
-  color: '#fff',
-},
-overallValue: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#fff',
-},
+  averageTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  averageGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 15,
+    gap: 10,
+  },
+  averageItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingHorizontal: 5,
+  },
+  averageLabel: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 5,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  averageValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  overallAverage: {
+    backgroundColor: '#6BC5C5',
+    borderRadius: 10,
+    padding: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  overallLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  overallValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  hamburgerButton: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    padding: 10,
+  },
+  hamburgerIcon: {
+    fontSize: 30,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    paddingTop: 100,
+    paddingRight: 20,
+  },
+  menuDropdown: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 8,
+    minWidth: 200,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  menuOption: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  menuOptionText: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '600',
+  },
+  cancelText: {
+    color: '#666',
+  },
+  menuDivider: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginHorizontal: 8,
+  },
 });
