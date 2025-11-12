@@ -14,6 +14,31 @@ interface Props {
 
 // main HomeScreen component that displays the menu/recipe list
 export default function HomeScreen({ navigation, menuItems }: Props) {
+  // function to calculate average price for each course type
+    const calculateAverages = () => {
+      const starters = menuItems.filter(item => item.course === 'Starter');
+      const mains = menuItems.filter(item => item.course === 'Main');
+      const desserts = menuItems.filter(item => item.course === 'Dessert');
+
+      // helper function to calculate average for a specific course
+      const getAverage = (items: MenuItem[]) => {
+        if (items.length === 0) return 0;
+        const total = items.reduce((sum, item) => sum + parseFloat(item.price), 0);
+        return total / items.length;
+      };
+
+      return {
+        starter: getAverage(starters),
+        main: getAverage(mains),
+        dessert: getAverage(desserts),
+        overall: menuItems.length > 0 
+          ? menuItems.reduce((sum, item) => sum + parseFloat(item.price), 0) / menuItems.length 
+          : 0,
+      };
+    };
+
+    // call the function to get the averages
+    const averages = calculateAverages();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#B8E6E6" />
@@ -23,6 +48,28 @@ export default function HomeScreen({ navigation, menuItems }: Props) {
         <Text style={styles.title}>CheffTingz</Text>
         <Text style={styles.subtitle}>My Menu </Text>
         <Text style={styles.count}>Total: {menuItems.length} recipes</Text>
+        {/* average price section */}
+      <View style={styles.averageContainer}>
+        <Text style={styles.averageTitle}>Average Prices</Text>
+        <View style={styles.averageGrid}>
+          <View style={styles.averageItem}>
+            <Text style={styles.averageLabel}>Starters</Text>
+            <Text style={styles.averageValue}>R{averages.starter.toFixed(2)}</Text>
+          </View>
+          <View style={styles.averageItem}>
+            <Text style={styles.averageLabel}>Mains</Text>
+            <Text style={styles.averageValue}>R{averages.main.toFixed(2)}</Text>
+          </View>
+          <View style={styles.averageItem}>
+            <Text style={styles.averageLabel}>Desserts</Text>
+            <Text style={styles.averageValue}>R{averages.dessert.toFixed(2)}</Text>
+          </View>
+        </View>
+        <View style={styles.overallAverage}>
+          <Text style={styles.overallLabel}>Overall Average: </Text>
+          <Text style={styles.overallValue}>R{averages.overall.toFixed(2)}</Text>
+        </View>
+      </View>
       </View>
 
       {/*scrollable recipe list */}
@@ -201,4 +248,62 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  averageContainer: {
+    backgroundColor: '#D4F1F1',
+    marginTop: 15,
+    marginHorizontal: -10,
+    marginLeft: -20,
+    marginRight: -20,
+    paddingHorizontal: 73,
+    borderRadius: 15,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: '#94D4D4',
+  },
+averageTitle: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#000',
+  marginBottom: 12,
+  textAlign: 'center',
+},
+averageGrid: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 15,
+  paddingHorizontal: -10
+},
+averageItem: {
+  flex: 1,
+  alignItems: 'center',
+},
+averageLabel: {
+  fontSize: 12,
+  color: '#666',
+  marginBottom: 4,
+  fontWeight: '600',
+},
+averageValue: {
+  fontSize: 13,
+  fontWeight: 'bold',
+  color: '#000',
+},
+overallAverage: {
+  backgroundColor: '#6BC5C5',
+  borderRadius: 10,
+  padding: 12,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+overallLabel: {
+  fontSize: 14,
+  fontWeight: '600',
+  color: '#fff',
+},
+overallValue: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#fff',
+},
 });

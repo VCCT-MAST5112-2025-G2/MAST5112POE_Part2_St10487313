@@ -63,7 +63,7 @@ export default function AddRecipeScreen({ navigation, menuItems, setMenuItems }:
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#B8E6E6" /> {/* keeping it consistent */}
+      <StatusBar barStyle="dark-content" backgroundColor="#B8E6E6" /> 
       
       {/* Header */}
       <View style={styles.header}>
@@ -149,7 +149,7 @@ export default function AddRecipeScreen({ navigation, menuItems, setMenuItems }:
             style={[styles.input, styles.textArea]}
             placeholder="Describe your dish..."
             value={description}
-            onChangeText={setDescription} // update description state
+            onChangeText={setDescription} 
             multiline
             numberOfLines={4}
             textAlignVertical="top"
@@ -162,7 +162,7 @@ export default function AddRecipeScreen({ navigation, menuItems, setMenuItems }:
             style={styles.input}
             placeholder="e.g., 69.99"
             value={price}
-            onChangeText={setPrice} // update price state
+            onChangeText={setPrice}
             keyboardType="decimal-pad"
             placeholderTextColor="#999"
           />

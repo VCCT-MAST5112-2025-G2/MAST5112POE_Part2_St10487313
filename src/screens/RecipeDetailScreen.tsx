@@ -13,7 +13,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#B8E6E6" /> {/* still consistent */}
+      <StatusBar barStyle="dark-content" backgroundColor="#B8E6E6" /> 
       
       {/* header section */}
       <View style={styles.header}>
@@ -42,7 +42,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
             <Text style={styles.courseText}>{recipe.course}</Text>
           </View>
 
-          <View style={styles.divider} /> {/* visual divider between course badge and description */}
+          <View style={styles.divider} /> 
 
           {/* description section */}
           <View style={styles.section}>
@@ -51,7 +51,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
             <Text style={styles.sectionValue}>{recipe.description}</Text>
           </View>
 
-          <View style={styles.divider} /> {/* visual divider between description and price */}
+          <View style={styles.divider} /> 
 
           {/* price section */}
           <View style={styles.section}>
