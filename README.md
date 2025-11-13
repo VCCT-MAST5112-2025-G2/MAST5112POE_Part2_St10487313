@@ -6,9 +6,9 @@ CheffTingz - Recipe Management Mobile App
 ## Student Information
 * **Name:** Marcus Fourie
 * **Student Number:** ST10487313
-* **Course:** MAST5112 - Part 2
+* **Course:** MAST5112 - POE
 * **Github Link:** https://github.com/Marcus-13/MAST5112POE_Part2_St10487313.git
-* **Youtube Demonstrating Video Link:** https://youtube.com/shorts/GkS-qzBnsPM
+* **Youtube Demonstrating Video Link:**[ https://youtube.com/shorts/GkS-qzBnsPM](https://youtube.com/shorts/O1nB6oAgFvQ)
 
 ## Project Overview
 CheffTingz is a mobile application designed for Chef Christoffel to organize and manage his restaurant recipes digitally.
