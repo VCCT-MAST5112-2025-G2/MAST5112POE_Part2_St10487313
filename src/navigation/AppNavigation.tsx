@@ -21,17 +21,38 @@ const initialMenuItems: MenuItem[] = [
   },
   {
     id: '2',
+    dishName: 'Calamari Tubes',
+    course: 'Starter',
+    description: 'Crispy fried calamari rings with lemon aioli and fresh herbs',
+    price: '89.99',
+  },
+  {
+    id: '3',
     dishName: '1 kg T-Bone Steak',
     course: 'Main',
     description: 'Beef Wagu cooked to pink perfection with a side of veggies and chips',
     price: '420.00',
   },
   {
-    id: '3',
+    id: '4',
+    dishName: 'Grilled Salmon',
+    course: 'Main',
+    description: 'Atlantic salmon fillet with garlic butter, asparagus, and mashed potatoes',
+    price: '215.50',
+  },
+  {
+    id: '5',
     dishName: 'Chocolate Lava Cake',
     course: 'Dessert',
     description: 'Warm cake with a molten center served with vanilla ice cream and a drizzle of chocolate syrup',
-    price: '169.99',
+    price: '129.99',
+  },
+  {
+    id: '6',
+    dishName: 'Malva Pudding',
+    course: 'Dessert',
+    description: 'Traditional South African sponge cake with apricot jam and warm custard',
+    price: '79.99',
   },
 ];
 
